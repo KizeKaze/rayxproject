@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
+<?php
+require 'views/includes/functions.php';
+require 'vendor/autoload.php';
+$sql = require "core/bootstrap.php";
 
-    <h1></h1>
+Router::load('routes.php')
+    ->direct(Request::uri(), Request::method());
 
-</body>
-</html>
