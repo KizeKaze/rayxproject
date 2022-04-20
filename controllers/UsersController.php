@@ -12,7 +12,6 @@ class UsersController{
 
     public function store()
     {
-
         App::get('database')->insert('users', [
             'user_fname' => $_POST['name']
         ]);

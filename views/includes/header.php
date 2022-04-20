@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,5 +11,5 @@
 
 </head>
 <body>
-
+<?php //dd($_SESSION, 1); ?>
 <?php require('nav.php') ?>
