@@ -14,13 +14,18 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/users">Users</a>
                 </li>
+                <?php if (isset($_SESSION['username'])) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                    </li>
+                <?php else : ?>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/register">Register</a>
                 </li>
-
+                <?php endif; ?>
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

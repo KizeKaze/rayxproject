@@ -29,19 +29,45 @@ class PagesController
 
     public function sign_in()
     {
-        var_dump($_POST);
+        $user_email = sanitize($_POST['user_email']);
+        $user_password = sanitize($_POST['user_password']);
 
-        $users = App::get('database')->selectAll('users');
+        $result = App::get('database')->selectUser('users', [
+            'user_email' => $user_email
+            ]);
+        $db_user_email = $result[0]->user_email;
+        $db_user_password = $result[0]->user_password;
 
-        return view('login', [
-            'users' => $users
-        ]);
+        $verified_pass = password_verify($user_password, $db_user_password);
+
+        if ($user_email !== $db_user_email || $verified_pass != true) {
+            header("Location: /");
+        } else if ($user_email == $db_user_email && $verified_pass) {
+            $_SESSION['user_id'] = $result[0]->user_id;
+            $_SESSION['username'] = $result[0]->username;
+            $_SESSION['user_email'] = $result[0]->user_email;
+            $_SESSION['user_role'] = $result[0]->user_role;
+        }
+        header("Location: /");
 
     }
 
     public function register()
     {
         return view('register');
+    }
+
+    public function logout()
+    {
+        session_start();
+
+        $_SESSION['username'] = null;
+        $_SESSION['user_id'] = null;
+        $_SESSION['user_fname'] = null;
+        $_SESSION['user_lname'] = null;
+        $_SESSION['user_email'] = null;
+        $_SESSION['user_role'] = null;
+        header("Location: /");
     }
 
     public function sign_up()

@@ -4,6 +4,7 @@
 $router->get('', 'PagesController@home');
 $router->get('about', 'PagesController@about');
 $router->get('contact', 'PagesController@contact');
+$router->get('logout', 'PagesController@logout');
 
 $router->get('login', 'PagesController@login');
 $router->post('login', 'PagesController@sign_in');
