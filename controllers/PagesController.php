@@ -32,7 +32,26 @@ class PagesController
         $user_email = sanitize($_POST['user_email']);
         $user_password = sanitize($_POST['user_password']);
 
-        $result = App::get('database')->selectUser('users', [
+        $errors = [];
+
+
+        if(!$user_email) {
+            $errors[] = 'Please enter a valid email';
+        }
+        if(!$user_password) {
+            $errors[] = 'Please enter a valid password';
+        }
+
+        if ($errors) {
+            $array = [
+                'failed' => true,
+                'errors' => $errors
+            ];
+
+        return view('login', $array);
+        }
+
+        $result = App::get('database')->selectQuery('users', [
             'user_email' => $user_email
             ]);
         $db_user_email = $result[0]->user_email;
@@ -85,6 +104,7 @@ class PagesController
         if(!$user_username) {
             $errors[] = 'Please enter a valid username';
         }
+
         if(!$password || $password != $confirm_password) {
             $errors[] = 'Please enter a valid password';
         }

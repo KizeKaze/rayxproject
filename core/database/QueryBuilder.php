@@ -18,7 +18,7 @@ class QueryBuilder
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-    public function selectUser($table, $parameters)
+    public function selectQuery($table, $parameters)
     {
         $sql = sprintf(
             'SELECT * from %s WHERE (%s) = (%s)',

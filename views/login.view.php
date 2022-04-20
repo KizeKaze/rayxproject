@@ -2,6 +2,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-6">
+            <?php if(isset($data['failed'])) {
+                foreach ($data['errors'] as $error) { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <div class="text-center"><?= $error; ?></div>
+                    </div>
+                <?php  }
+            } ?>
             <div class="card">
                 <div class="card-body">
                     <form method="post" action="/login">
