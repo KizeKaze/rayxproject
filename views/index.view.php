@@ -4,11 +4,16 @@
         <div class="row">
             <!-- Main content -->
             <div class="col-8">
+
+                <!-- Create Post Card -->
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><a href="#"><input class="form-control" type="text" name="create_post" placeholder="Create Post"></a></h5>
+                        <h5 class="card-title"><a href="#"><input class="form-control" type="text" name="create_post" placeholder="Create Post" data-bs-toggle="modal"
+                                                                  data-bs-target="#createPost"></a></h5>
                     </div>
                 </div>
+
+                <!-- Main Posts-->
                 <?php foreach ($posts as $post) : ?>
                 <div class="card">
                     <div class="card-body">
@@ -55,6 +60,24 @@
             </div>
         </div>
     </div>
+
+<div class="modal" id="createPost" tabindex="-1" aria-labelledby="createPostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Fake text for now</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <?php require 'includes/footer.php' ?>

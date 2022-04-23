@@ -60,7 +60,15 @@ class PagesController
         $verified_pass = password_verify($user_password, $db_user_password);
 
         if ($user_email !== $db_user_email || $verified_pass != true) {
-            header("Location: /");
+            $errors[] = 'Email or Password not found';
+
+            if ($errors) {
+                $array = [
+                    'failed' => true,
+                    'errors' => $errors
+                ];
+                return view('login', $array);
+        }
         } else if ($user_email == $db_user_email && $verified_pass) {
             $_SESSION['user_id'] = $result[0]->user_id;
             $_SESSION['username'] = $result[0]->username;
