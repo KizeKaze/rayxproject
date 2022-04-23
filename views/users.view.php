@@ -3,7 +3,7 @@
 
 <?php foreach ($users as $user) : ?>
 
-    <li><?=$user->user_fname . " has an ID of " . $user->user_id;?></li>
+    <li><?=$user->username . " has an ID of " . $user->user_id;?></li>
 
     <?php endforeach; ?>
 
