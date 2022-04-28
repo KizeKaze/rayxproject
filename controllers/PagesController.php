@@ -75,7 +75,12 @@ class PagesController
             $_SESSION['user_email'] = $result[0]->user_email;
             $_SESSION['user_role'] = $result[0]->user_role;
         }
-        header("Location: /");
+
+        $posts = App::get('database')->selectAll('posts');
+
+        return view('index', [
+            'posts' => $posts
+        ]);
 
     }
 
@@ -138,5 +143,26 @@ class PagesController
         }
 
         return view('register', $array);
+    }
+    public function insert_post()
+    {
+
+        $post_title = sanitize($_POST['post_title']);
+        $post_content = sanitize($_POST['post_content']);
+        $post_user = sanitize($_POST['post_username']);
+
+        App::get('database')->insert('posts', [
+            'post_title' => $post_title,
+            'post_content' => $post_content,
+            'post_user' => $post_user
+        ]);
+
+        //return to index view with new posts
+        $posts = App::get('database')->selectAll('posts');
+
+        return view('index', [
+            'posts' => $posts
+        ]);
+
     }
 }

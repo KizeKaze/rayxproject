@@ -5,6 +5,7 @@
             <!-- Main content -->
             <div class="col-8">
 
+                <?php if (isset($_SESSION['user_id'])) : ?>
                 <!-- Create Post Card -->
                 <div class="card">
                     <div class="card-body">
@@ -12,7 +13,7 @@
                                                                   data-bs-target="#createPost"></a></h5>
                     </div>
                 </div>
-
+                <?php endif; ?>
                 <!-- Main Posts-->
                 <?php foreach ($posts as $post) : ?>
                 <div class="card">
@@ -69,15 +70,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Fake text for now</p>
+                <form id="create_post">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="post_title" class="form-control" id="floatingPostTitle" placeholder="Post Title" required>
+                        <label for="floatingPostTitle">Post Title</label>
+                    </div>
+                    <div class="form-floating">
+                        <textarea cols="5" name="post_content" class="form-control" id="floatingPostContent" placeholder="post Content" required></textarea>
+                        <label for="floatingPostContent">Post Content</label>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary" value="Send">
+                <input type="hidden" name="post_user" value="<?=$_SESSION['username']?>">
+                </form>
             </div>
         </div>
     </div>
 </div>
+<script src="../core/js/create_post.js"></script>
 
 
 <?php require 'includes/footer.php' ?>
