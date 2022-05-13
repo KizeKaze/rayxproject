@@ -5,7 +5,12 @@ class PagesController
 
     public function home()
     {
-        $posts = App::get('database')->selectAll('posts');
+        if(isset($_SESSION['user_id'])){
+            $parameters = array("order" => "DESC", "user_id" => $_SESSION['user_id']);
+        } else {
+            $parameters = array("order" => "DESC");
+        }
+        $posts = App::get('database')->selectAll('posts', $parameters);
 
         return view('index', [
             'posts' => $posts
@@ -76,7 +81,8 @@ class PagesController
             $_SESSION['user_role'] = $result[0]->user_role;
         }
 
-        $posts = App::get('database')->selectAll('posts');
+        $parameters = array("order" => "DESC", "user_id" => $_SESSION['user_id']);
+        $posts = App::get('database')->selectAll('posts', $parameters);
 
         return view('index', [
             'posts' => $posts
@@ -144,25 +150,46 @@ class PagesController
 
         return view('register', $array);
     }
+
+    public function create_post()
+    {
+        return view('create_post');
+
+    }
+
     public function insert_post()
     {
+        $errors = [];
 
         $post_title = sanitize($_POST['post_title']);
         $post_content = sanitize($_POST['post_content']);
-        $post_user = sanitize($_POST['post_username']);
+        $user_id = sanitize($_SESSION['user_id']);
+        $post_username = sanitize(($_SESSION['username']));
+
+        if(!$post_title) {
+            $errors[] = 'Please enter a title';
+        }
+        if(!$post_content) {
+            $errors[] = 'Post body cannot be empty';
+        }
+
+        if(!$errors) {
+            $array = [
+                'success' => true
+            ];
 
         App::get('database')->insert('posts', [
             'post_title' => $post_title,
             'post_content' => $post_content,
-            'post_user' => $post_user
+            'post_user' => $post_username
         ]);
 
-        //return to index view with new posts
-        $posts = App::get('database')->selectAll('posts');
-
-        return view('index', [
-            'posts' => $posts
-        ]);
-
+    } else {
+            $array = [
+            'failed' => true,
+            'errors' => $errors
+            ];
+        }
+        return view('create_post', $array);
     }
 }

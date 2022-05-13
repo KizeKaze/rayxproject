@@ -26,7 +26,7 @@ $("#create_post").submit(function(event){
 
     //fire off request to form.php
     request = $.ajax({
-        url: "",
+        url: "/",
         type: "post",
         data: serializedData
     });

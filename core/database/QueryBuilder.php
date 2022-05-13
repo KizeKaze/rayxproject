@@ -9,9 +9,20 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
-    public function selectAll($table)
+    public function selectAll($table, $parameters = [])
     {
-        $stmt = $this->pdo->prepare("SELECT * from $table");
+
+        $sql = ("SELECT * FROM $table");
+
+        if(isset($parameters['order'])) {
+            $sql .= " ORDER BY post_id ". $parameters['order'] . "";
+        } else if(isset($parameters['where'])) {
+            $data = $parameters['where'];
+            $user = $parameters['username'];
+            $sql .= " WHERE $data = '$user'";
+        }
+
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute();
 

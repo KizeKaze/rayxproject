@@ -2,7 +2,9 @@
 
 // URLS via GET or POST, directed to a controller and a function
 $router->get('', 'PagesController@home');
-$router->post('', 'PagesController@insert_post');
+
+$router->get('create_post', 'PagesController@create_post');
+$router->post('create_post', 'PagesController@insert_post');
 
 $router->get('about', 'PagesController@about');
 $router->get('contact', 'PagesController@contact');
