@@ -153,6 +153,8 @@ class PagesController
 
     public function create_post()
     {
+        // get id here
+//        dd(Request::id());
         return view('create_post');
 
     }
@@ -192,4 +194,15 @@ class PagesController
         }
         return view('create_post', $array);
     }
+
+    public function show_post()
+    {
+        echo "You're in show post right now hey.";
+
+        dd($_GET);
+
+    }
+
+
+
 }
