@@ -33,6 +33,7 @@ class Router
            return $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
        }
 
+
        throw new Exception('No route defined for this URI');
     }
 

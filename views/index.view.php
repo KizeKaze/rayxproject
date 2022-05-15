@@ -1,5 +1,7 @@
 <?php require 'includes/header.php' ?>
 
+
+
     <div class="container border">
         <div class="row">
             <!-- Main content -->
@@ -13,23 +15,36 @@
                 <?php endif; ?>
                 <!-- Main Posts-->
                 <?php foreach ($posts as $post) : ?>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $post->post_title; ?></h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Posted by: <?= $post->post_user; ?></h6>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                Cras justo odio
-                                <a href="#" class="card-link">Card link</a>
-                                <a href="#" class="card-link">Another link</a>
-                            </li>
-                        </ul>
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <?php if(empty($post->post_image)) : ?>
+                                    <a href="/show_post/<?= $post->post_id;?>">
+                                        <img style="width: 7rem;" src="../core/images/default.jpg" class="img-fluid rounded-start" alt="...">
+                                    </a>
+                                <?php else : ?>
+                                    <a href="/show_post/<?= $post->post_id;?>">
+                                        <img style="width: 7rem;" src="../core/images/<?= $post->post_image; ?>" class="img-fluid rounded-start" alt="...">
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?=$post->post_category_id;?> <a href="/show_post/<?= $post->post_id;?>"><?= $post->post_title; ?></a></h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">Posted by: <?= $post->post_user; ?></h6>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            Cras justo odio
+                                            <a href="#" class="card-link">Card link</a>
+                                            <a href="#" class="card-link">Another link</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
             </div>
-
-
 
     <!-- Sidebar -->
 

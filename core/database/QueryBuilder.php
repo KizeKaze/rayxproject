@@ -18,8 +18,8 @@ class QueryBuilder
             $sql .= " ORDER BY post_id ". $parameters['order'] . "";
         } else if(isset($parameters['where'])) {
             $data = $parameters['where'];
-            $user = $parameters['username'];
-            $sql .= " WHERE $data = '$user'";
+            $id = $parameters['data_two'];
+            $sql .= " WHERE $data = '$id'";
         }
 
         $stmt = $this->pdo->prepare($sql);

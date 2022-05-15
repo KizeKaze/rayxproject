@@ -12,8 +12,15 @@ class PagesController
         }
         $posts = App::get('database')->selectAll('posts', $parameters);
 
+        $cat_id = $posts[0]->post_category_id;
+        $parameters = array("where" => "cat_id", "data_two" => $cat_id);
+
+        $categories = App::get('database')->selectAll('category', $parameters);
+
+
         return view('index', [
-            'posts' => $posts
+            'posts' => $posts,
+            'categories' => $categories
         ]);
     }
 
@@ -153,9 +160,8 @@ class PagesController
 
     public function create_post()
     {
-        // get id here
-//        dd(Request::id());
-        return view('create_post');
+        $categories = App::get('database')->selectAll('category');
+        return view('create_post', $categories);
 
     }
 
@@ -165,12 +171,23 @@ class PagesController
 
         $post_title = sanitize($_POST['post_title']);
         $post_content = sanitize($_POST['post_content']);
+        $post_category_id = sanitize($_POST['post_category']);
         $user_id = sanitize($_SESSION['user_id']);
         $post_username = sanitize(($_SESSION['username']));
+        $post_date = date('d-m-y');
+        $post_image = sanitize($_FILES['post_image']['name']);
+        $post_image_temp = sanitize($_FILES['post_image']['tmp_name']);
+        $post_tags = sanitize($_POST['post_tags']);
+
 
         if(!$post_title) {
             $errors[] = 'Please enter a title';
         }
+
+        if(!$post_tags) {
+            $errors[] = 'Please enter some tags';
+        }
+
         if(!$post_content) {
             $errors[] = 'Post body cannot be empty';
         }
@@ -180,11 +197,17 @@ class PagesController
                 'success' => true
             ];
 
-        App::get('database')->insert('posts', [
-            'post_title' => $post_title,
-            'post_content' => $post_content,
-            'post_user' => $post_username
-        ]);
+            move_uploaded_file($post_image_temp, "./core/images/$post_image");
+
+            App::get('database')->insert('posts', [
+                'post_title' => $post_title,
+                'post_category_id' => $post_category_id,
+                'post_content' => $post_content,
+                'post_user' => $post_username,
+                'post_tags' => $post_tags,
+                'post_date' => $post_date,
+                'post_image' => $post_image
+            ]);
 
     } else {
             $array = [
@@ -197,9 +220,17 @@ class PagesController
 
     public function show_post()
     {
-        echo "You're in show post right now hey.";
+       $id = Request::id();
 
-        dd($_GET);
+       $post = App::get('database')->selectQuery('posts', [
+            'post_id' => $id
+       ]);
+
+        return view('post', [
+            'posts' => $post
+        ]);
+
+
 
     }
 
