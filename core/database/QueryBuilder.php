@@ -9,9 +9,29 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
-    public function selectAll($table)
+    public function combineTables($table1, $column1, $table2, $column2, $clause = "")
     {
-        $stmt = $this->pdo->prepare("SELECT * from $table");
+        $sql =("SELECT * FROM $table1 INNER JOIN $table2 ON $table1.$column1 = $table2.$column2 $clause");
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+    }
+
+    public function selectAll($table, $parameters = [])
+    {
+
+        $sql = ("SELECT * FROM $table");
+
+        if(isset($parameters['order'])) {
+            $sql .= " ORDER BY post_id ". $parameters['order'] . "";
+        } else if(isset($parameters['where'])) {
+            $data = $parameters['where'];
+            $id = $parameters['data_two'];
+            $sql .= " WHERE $data = '$id'";
+        }
+
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute();
 

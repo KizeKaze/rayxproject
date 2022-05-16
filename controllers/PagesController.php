@@ -5,10 +5,15 @@ class PagesController
 
     public function home()
     {
-        $posts = App::get('database')->selectAll('posts');
+        if(isset($_SESSION['user_id'])){
+            $parameters = array("order" => "DESC", "user_id" => $_SESSION['user_id']);
+        } else {
+            $parameters = array("order" => "DESC");
+        }
+        $posts = App::get('database')->combineTables('posts', 'post_category_id', 'category', 'cat_id', 'ORDER BY post_id DESC');
 
         return view('index', [
-            'posts' => $posts
+            'posts' => $posts,
         ]);
     }
 
@@ -75,7 +80,8 @@ class PagesController
             $_SESSION['user_email'] = $result[0]->user_email;
             $_SESSION['user_role'] = $result[0]->user_role;
         }
-        header("Location: /");
+
+        $this->home();
 
     }
 
@@ -139,4 +145,83 @@ class PagesController
 
         return view('register', $array);
     }
+
+    public function create_post()
+    {
+        $categories = App::get('database')->selectAll('category');
+        return view('create_post', $categories);
+
+    }
+
+    public function insert_post()
+    {
+        $errors = [];
+
+        $post_title = sanitize($_POST['post_title']);
+        $post_content = sanitize($_POST['post_content']);
+        $post_category_id = sanitize($_POST['post_category']);
+        $user_id = sanitize($_SESSION['user_id']);
+        $post_username = sanitize(($_SESSION['username']));
+        $post_date = date('d-m-y');
+        $post_image = sanitize($_FILES['post_image']['name']);
+        $post_image_temp = sanitize($_FILES['post_image']['tmp_name']);
+        $post_tags = sanitize($_POST['post_tags']);
+
+
+        if(!$post_title) {
+            $errors[] = 'Please enter a title';
+        }
+
+        if(!$post_tags) {
+            $errors[] = 'Please enter some tags';
+        }
+
+        if(!$post_content) {
+            $errors[] = 'Post body cannot be empty';
+        }
+
+        if(!$errors) {
+            $array = [
+                'success' => true
+            ];
+
+            move_uploaded_file($post_image_temp, "./core/images/$post_image");
+
+            App::get('database')->insert('posts', [
+                'post_title' => $post_title,
+                'post_category_id' => $post_category_id,
+                'post_content' => $post_content,
+                'post_user' => $post_username,
+                'post_tags' => $post_tags,
+                'post_date' => $post_date,
+                'post_image' => $post_image
+            ]);
+
+    } else {
+            $array = [
+            'failed' => true,
+            'errors' => $errors
+            ];
+        }
+        return view('create_post', $array);
+    }
+
+    public function show_post()
+    {
+       $id = Request::id();
+
+       $post = App::get('database')->selectQuery('posts', [
+            'post_id' => $id
+       ]);
+
+        return view('post', [
+            'posts' => $post
+        ]);
+
+
+
+    }
+
+
+
 }

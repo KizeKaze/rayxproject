@@ -28,15 +28,11 @@ class Router
 
     public function direct($uri, $requestType)
     {
-
-        //dd([$this->routes, $uri, $requestType]);
-
        if (array_key_exists($uri, $this->routes[$requestType])) {
 
-           return $this->callAction(
-               ...explode('@', $this->routes[$requestType][$uri])
-           );
+           return $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
        }
+
 
        throw new Exception('No route defined for this URI');
     }
