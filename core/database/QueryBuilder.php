@@ -9,6 +9,15 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
+    public function combineTables($table1, $column1, $table2, $column2, $clause = "")
+    {
+        $sql =("SELECT * FROM $table1 INNER JOIN $table2 ON $table1.$column1 = $table2.$column2 $clause");
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+    }
+
     public function selectAll($table, $parameters = [])
     {
 

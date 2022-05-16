@@ -15,31 +15,37 @@
                 <?php endif; ?>
                 <!-- Main Posts-->
                 <?php foreach ($posts as $post) : ?>
+
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <?php if(empty($post->post_image)) : ?>
                                     <a href="/show_post/<?= $post->post_id;?>">
-                                        <img style="width: 7rem;" src="../core/images/default.jpg" class="img-fluid rounded-start" alt="...">
+                                        <img src="../core/images/default.jpg" class="img-fluid rounded-start" alt="...">
                                     </a>
                                 <?php else : ?>
                                     <a href="/show_post/<?= $post->post_id;?>">
-                                        <img style="width: 7rem;" src="../core/images/<?= $post->post_image; ?>" class="img-fluid rounded-start" alt="...">
+                                        <img src="../core/images/<?= $post->post_image; ?>" class="img-fluid rounded-start" alt="...">
                                     </a>
                                 <?php endif; ?>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <div class="card-body">
-                                    <h5 class="card-title"><?=$post->post_category_id;?> <a href="/show_post/<?= $post->post_id;?>"><?= $post->post_title; ?></a></h5>
+                                    <h5 class="card-title">
+                                        <button type="button" class="btn btn-info btn-sm"><?=$post->cat_title;?> </button>
+                                        <a class="text-decoration-none" href="/show_post/<?= $post->post_id;?>"><?= $post->post_title; ?></a>
+                                    </h5>
                                     <h6 class="card-subtitle mb-2 text-muted">Posted by: <?= $post->post_user; ?></h6>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            Cras justo odio
-                                            <a href="#" class="card-link">Card link</a>
-                                            <a href="#" class="card-link">Another link</a>
-                                        </li>
-                                    </ul>
                                 </div>
+                            </div>
+                            <div class="col-md-2">
+                                <ul class="list-group">
+                                    <li class="list-group-item"><a href="#">Comment</a></li>
+                                    <li class="list-group-item"><a href="#">Report</a></li>
+                                    <?php if($post->post_user == $_SESSION['username']) : ?>
+                                    <li class="list-group-item"><a href="#">Delete</a></li>
+                                    <?php endif; ?>
+                                </ul>
                             </div>
                         </div>
                     </div>

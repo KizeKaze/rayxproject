@@ -10,17 +10,10 @@ class PagesController
         } else {
             $parameters = array("order" => "DESC");
         }
-        $posts = App::get('database')->selectAll('posts', $parameters);
-
-        $cat_id = $posts[0]->post_category_id;
-        $parameters = array("where" => "cat_id", "data_two" => $cat_id);
-
-        $categories = App::get('database')->selectAll('category', $parameters);
-
+        $posts = App::get('database')->combineTables('posts', 'post_category_id', 'category', 'cat_id', 'ORDER BY post_id DESC');
 
         return view('index', [
             'posts' => $posts,
-            'categories' => $categories
         ]);
     }
 
@@ -88,12 +81,7 @@ class PagesController
             $_SESSION['user_role'] = $result[0]->user_role;
         }
 
-        $parameters = array("order" => "DESC", "user_id" => $_SESSION['user_id']);
-        $posts = App::get('database')->selectAll('posts', $parameters);
-
-        return view('index', [
-            'posts' => $posts
-        ]);
+        $this->home();
 
     }
 
